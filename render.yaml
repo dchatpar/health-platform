@@ -1,10 +1,9 @@
-# Render Blueprint - Healthcare Platform (All Services)
-# Deploy with: render blueprint create
+# Render Blueprint - Healthcare Platform
+# Deploy from render.com dashboard: New -> Blueprint -> Upload this file
 
 services:
-  # Backend API (NestJS)
   - name: health-backend
-    env: Node
+    env: node
     region: oregon
     plan: free
     rootDir: apps/backend
@@ -33,9 +32,8 @@ services:
       - key: ALLOWED_ORIGINS
         value: "*"
 
-  # Pharmacy Web App (Next.js)
   - name: health-pharmacy-app
-    env: Node
+    env: node
     region: oregon
     plan: free
     rootDir: apps/pharmacy-app
@@ -45,19 +43,12 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: health-backend
-          envVarKey: RENDER_EXTERNAL_URL
+        value: https://health-backend.onrender.com
       - key: NEXT_PUBLIC_SOCKET_URL
-        fromService:
-          type: web
-          name: health-backend
-          envVarKey: RENDER_EXTERNAL_URL
+        value: https://health-backend.onrender.com
 
-  # Admin Panel (Next.js)
   - name: health-admin-panel
-    env: Node
+    env: node
     region: oregon
     plan: free
     rootDir: apps/admin-panel
@@ -67,18 +58,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: health-backend
-          envVarKey: RENDER_EXTERNAL_URL
+        value: https://health-backend.onrender.com
 
-# PostgreSQL Database
 postgresql:
   - name: health-db
     plan: free
     region: oregon
 
-# Redis Cache
 redis:
   - name: health-redis
     plan: free

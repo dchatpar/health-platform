@@ -22,9 +22,7 @@ services:
           name: health-db
           property: connectionString
       - key: REDIS_URL
-        fromDatabase:
-          name: health-redis
-          property: connectionString
+        sync: false
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET

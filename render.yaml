@@ -1,16 +1,12 @@
-# Render Blueprint - Healthcare Platform
-
-databases:
-  - name: health-db
-    plan: free
-
+# Simpler Render Blueprint
 services:
-  - type: web
-    name: health-backend
-    env: node
+  - name: health-backend
+    template: node
+    repo: https://github.com/dchatpar/health-platform
+    branch: main
+    rootDir: apps/backend
     region: oregon
     plan: free
-    rootDir: apps/backend
     buildCommand: npm install && npx prisma generate && npm run build
     startCommand: npm run start:prod
     healthCheckPath: /api/v1/health
@@ -18,9 +14,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: health-db
-          property: connectionString
+        sync: false
       - key: REDIS_URL
         sync: false
       - key: JWT_SECRET
@@ -36,28 +30,13 @@ services:
       - key: ALLOWED_ORIGINS
         value: "*"
 
-  - type: web
-    name: health-pharmacy-app
-    env: node
-    region: oregon
-    plan: free
+  - name: health-pharmacy-app
+    template: node
+    repo: https://github.com/dchatpar/health-platform
+    branch: main
     rootDir: apps/pharmacy-app
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_API_URL
-        value: https://health-backend.onrender.com
-      - key: NEXT_PUBLIC_SOCKET_URL
-        value: https://health-backend.onrender.com
-
-  - type: web
-    name: health-admin-panel
-    env: node
     region: oregon
     plan: free
-    rootDir: apps/admin-panel
     buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
@@ -66,8 +45,27 @@ services:
       - key: NEXT_PUBLIC_API_URL
         value: https://health-backend.onrender.com
 
-  - type: keyvalue
-    name: health-redis
-    ipAllowList:
-      - source: 0.0.0.0/0
-        description: everywhere
+  - name: health-admin-panel
+    template: node
+    repo: https://github.com/dchatpar/health-platform
+    branch: main
+    rootDir: apps/admin-panel
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://health-backend.onrender.com
+
+databases:
+  - name: health-db
+    plan: free
+    region: oregon
+
+redis:
+  - name: health-redis
+    plan: free
+    region: oregon

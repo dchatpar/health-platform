@@ -1,15 +1,12 @@
 # Render Blueprint - Healthcare Platform
 
-database:
-  name: health-db
-  plan: free
-
-redis:
-  name: health-redis
-  plan: free
+databases:
+  - name: health-db
+    plan: free
 
 services:
-  - name: health-backend
+  - type: web
+    name: health-backend
     env: node
     region: oregon
     plan: free
@@ -21,9 +18,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase: health-db
+        fromDatabase:
+          name: health-db
+          property: connectionString
       - key: REDIS_URL
-        fromDatabase: health-redis
+        fromDatabase:
+          name: health-redis
+          property: connectionString
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
@@ -39,7 +40,8 @@ services:
       - key: ALLOWED_ORIGINS
         value: "*"
 
-  - name: health-pharmacy-app
+  - type: web
+    name: health-pharmacy-app
     env: node
     region: oregon
     plan: free
@@ -54,7 +56,8 @@ services:
       - key: NEXT_PUBLIC_SOCKET_URL
         value: https://health-backend.onrender.com
 
-  - name: health-admin-panel
+  - type: web
+    name: health-admin-panel
     env: node
     region: oregon
     plan: free
@@ -66,3 +69,9 @@ services:
         value: production
       - key: NEXT_PUBLIC_API_URL
         value: https://health-backend.onrender.com
+
+  - type: keyvalue
+    name: health-redis
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere

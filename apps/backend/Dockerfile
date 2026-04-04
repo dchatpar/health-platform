@@ -20,9 +20,10 @@ RUN npm run build
 
 # Set production mode
 ENV NODE_ENV=production
+ENV PORT=10000
 
 # Expose port
-EXPOSE 3000
+EXPOSE 10000
 
 # Start the application
 CMD ["npm", "run", "start:prod"]

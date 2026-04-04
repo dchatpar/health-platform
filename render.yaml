@@ -23,8 +23,6 @@ services:
           property: connectionString
       - key: REDIS_URL
         sync: false
-      - key: MONGODB_URI
-        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET

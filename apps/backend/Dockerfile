@@ -2,17 +2,27 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
+# Copy package files
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
 # Copy prisma schema and generate client
 COPY prisma ./prisma/
 RUN npx prisma generate
 
-# Copy source code and build
+# Copy source code
 COPY . .
+
+# Build
 RUN npm run build
 
+# Set production mode
+ENV NODE_ENV=production
+
+# Expose port
+EXPOSE 3000
+
 # Start the application
-CMD ["node", "dist/main.js"]
+CMD ["npm", "run", "start:prod"]

@@ -1,8 +1,20 @@
 # Render Blueprint - Healthcare Platform
 # Deploy from render.com dashboard: New -> Blueprint -> Upload this file
 
+resources:
+  - name: health-db
+    type: postgresql
+    plan: free
+    region: oregon
+
+  - name: health-redis
+    type: redis
+    plan: free
+    region: oregon
+
 services:
   - name: health-backend
+    type: web
     env: node
     region: oregon
     plan: free
@@ -14,9 +26,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: health-db
+          property: connectionString
       - key: REDIS_URL
-        sync: false
+        fromDatabase:
+          name: health-redis
+          property: connectionString
       - key: MONGODB_URI
         sync: false
       - key: JWT_SECRET
@@ -33,6 +49,7 @@ services:
         value: "*"
 
   - name: health-pharmacy-app
+    type: web
     env: node
     region: oregon
     plan: free
@@ -48,6 +65,7 @@ services:
         value: https://health-backend.onrender.com
 
   - name: health-admin-panel
+    type: web
     env: node
     region: oregon
     plan: free
@@ -59,13 +77,3 @@ services:
         value: production
       - key: NEXT_PUBLIC_API_URL
         value: https://health-backend.onrender.com
-
-postgresql:
-  - name: health-db
-    plan: free
-    region: oregon
-
-redis:
-  - name: health-redis
-    plan: free
-    region: oregon

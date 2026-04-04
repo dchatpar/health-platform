@@ -1,0 +1,19 @@
+# Render Blueprint - Admin Panel
+# Deploy with: render blueprint create
+
+services:
+  - name: health-admin-panel
+    env: Node
+    region: oregon
+    plan: free
+    rootDir: apps/admin-panel
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL

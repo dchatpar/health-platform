@@ -1,0 +1,24 @@
+# Render Blueprint - Pharmacy Web App
+# Deploy with: render blueprint create
+
+services:
+  - name: health-pharmacy-app
+    env: Node
+    region: oregon
+    plan: free
+    rootDir: apps/pharmacy-app
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NEXT_PUBLIC_SOCKET_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL

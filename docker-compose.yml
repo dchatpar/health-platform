@@ -1,0 +1,99 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: health_postgres
+    environment:
+      POSTGRES_USER: health
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-health_password}
+      POSTGRES_DB: health_platform
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --lc-collate=C --lc-ctype=C'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U health -d health_platform']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - health_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: health_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_password}
+    healthcheck:
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-redis_password}', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - health_network
+
+  mongodb:
+    image: mongo:7
+    container_name: health_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: health
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mongo_password}
+      MONGO_INITDB_DATABASE: health_platform
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/health_platform -u health -p ${MONGO_PASSWORD:-mongo_password} --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - health_network
+
+  # Optional: Admin tools for development
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: health_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@health.local
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+    networks:
+      - health_network
+    profiles:
+      - admin
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: health_redis_commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_password}
+    ports:
+      - '8081:8081'
+    depends_on:
+      - redis
+    networks:
+      - health_network
+    profiles:
+      - admin
+
+networks:
+  health_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongo_data:

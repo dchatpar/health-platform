@@ -1,0 +1,85 @@
+# Render Blueprint - Healthcare Platform (All Services)
+# Deploy with: render blueprint create
+
+services:
+  # Backend API (NestJS)
+  - name: health-backend
+    env: Node
+    region: oregon
+    plan: free
+    rootDir: apps/backend
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1h
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: PORT
+        value: 3000
+      - key: ALLOWED_ORIGINS
+        value: "*"
+
+  # Pharmacy Web App (Next.js)
+  - name: health-pharmacy-app
+    env: Node
+    region: oregon
+    plan: free
+    rootDir: apps/pharmacy-app
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NEXT_PUBLIC_SOCKET_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+  # Admin Panel (Next.js)
+  - name: health-admin-panel
+    env: Node
+    region: oregon
+    plan: free
+    rootDir: apps/admin-panel
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          type: web
+          name: health-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+# PostgreSQL Database
+postgresql:
+  - name: health-db
+    plan: free
+    region: oregon
+
+# Redis Cache
+redis:
+  - name: health-redis
+    plan: free
+    region: oregon

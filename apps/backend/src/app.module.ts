@@ -21,17 +21,6 @@ import { HealthModule } from './modules/health/health.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      validationSchema: {
-        NODE_ENV: 'development|production|test',
-        PORT: 'number',
-        DATABASE_URL: 'string',
-        JWT_SECRET: 'string',
-        JWT_EXPIRES_IN: 'string',
-        JWT_REFRESH_SECRET: 'string',
-        JWT_REFRESH_EXPIRES_IN: 'string',
-        REDIS_HOST: 'string',
-        REDIS_PORT: 'number',
-      },
     }),
 
     // Rate limiting

@@ -13,7 +13,8 @@ interface UseAuthOptions {
 
 export function useAuth(options: UseAuthOptions = {}) {
   const { required = false, userTypes = [], redirectTo = '/login' } = options;
-  const { data: session, status } = useSession();
+  const sessionResult = useSession();
+  const { data: session, status } = sessionResult || { data: undefined, status: 'loading' };
   const router = useRouter();
   const pathname = usePathname();
 
@@ -45,7 +46,8 @@ export function useAuth(options: UseAuthOptions = {}) {
 }
 
 export function useRequireAuth(redirectTo = '/login') {
-  const { status } = useSession();
+  const sessionResult = useSession();
+  const { status } = sessionResult || { status: 'loading' };
   const router = useRouter();
 
   useEffect(() => {

@@ -7,7 +7,7 @@ services:
     region: oregon
     plan: free
     rootDir: apps/pharmacy-app
-    buildCommand: cd ../packages/shared && npm install && npm run build && cd ../pharmacy-app && npm install && npm run build
+    buildCommand: cd ../../packages/shared && npm install && npm run build && cd ../pharmacy-app && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV

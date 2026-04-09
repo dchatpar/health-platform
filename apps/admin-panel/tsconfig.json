@@ -20,6 +20,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@shared/*": ["../packages/shared/src/*"],
       "@health/shared": ["../packages/shared/src"]
     }
   },

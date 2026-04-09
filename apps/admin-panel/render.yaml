@@ -7,7 +7,7 @@ services:
     region: oregon
     plan: free
     rootDir: apps/admin-panel
-    buildCommand: cd ../packages/shared && npm install && npm run build && cd ../admin-panel && npm install && npm run build
+    buildCommand: cd ../../packages/shared && npm install && npm run build && cd ../admin-panel && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV

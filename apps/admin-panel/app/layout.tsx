@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+        <AppRouterCacheProvider>
           <Providers>
             <ThemeRegistry>
               <Box sx={{ display: 'flex', minHeight: '100vh' }}>

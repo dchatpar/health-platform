@@ -5,14 +5,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with less memory usage
-RUN npm ci --prefer-offline --no-audit
+# Install dependencies
+RUN npm install
 
 # Copy source
 COPY . .
 
 # Build with reduced memory usage
-RUN NODE_OPTIONS="--max-old-space-size=512" npm run build
+RUN NODE_OPTIONS="--max-old-space-size=768" npm run build
 
 # Production image
 FROM node:20
@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Copy package files and install only production deps
 COPY package*.json ./
-RUN npm ci --only=production --prefer-offline --no-audit
+RUN npm install --only=production
 
 # Copy built app from builder
 COPY --from=builder /app/.next ./.next

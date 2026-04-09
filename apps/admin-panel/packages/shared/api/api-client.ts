@@ -103,7 +103,7 @@ function createApiClient(config: ApiClientConfig): AxiosInstance {
     instance.interceptors.response.use(
       (response) => response,
       async (error: ApiError) => {
-        const originalRequest = error.config;
+        const originalRequest = error.config as (AxiosRequestConfig & { _retry?: boolean }) | undefined;
 
         // Handle 401 errors by attempting token refresh
         if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {

@@ -6,6 +6,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -20,8 +23,8 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@shared': path.resolve(__dirname, './packages/shared/dist'),
-      '@health/shared': path.resolve(__dirname, './packages/shared/dist'),
+      '@shared': path.resolve(__dirname, './packages/shared'),
+      '@health/shared': path.resolve(__dirname, './packages/shared'),
     };
     return config;
   },

@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { theme } from '@/theme';
+import { ThemeRegistry } from '@/theme/ThemeProvider';
 import { Sidebar } from '@/components/common/Sidebar';
 import { Box } from '@mui/material';
+import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -24,24 +23,25 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-              <Sidebar />
-              <Box
-                component="main"
-                sx={{
-                  flexGrow: 1,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  minWidth: 0,
-                  bgcolor: 'background.default',
-                }}
-              >
-                {children}
+          <Providers>
+            <ThemeRegistry>
+              <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+                <Sidebar />
+                <Box
+                  component="main"
+                  sx={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minWidth: 0,
+                    bgcolor: 'background.default',
+                  }}
+                >
+                  {children}
+                </Box>
               </Box>
-            </Box>
-          </ThemeProvider>
+            </ThemeRegistry>
+          </Providers>
         </AppRouterCacheProvider>
       </body>
     </html>

@@ -62,7 +62,7 @@ export const OrderStatusOrder: OrderStatusType[] = [
   OrderStatus.REFUNDED,
 ];
 
-export const CANCELLABLE_STATUSES: OrderStatusType[] = [
+export const ORDER_CANCELLABLE_STATUSES: OrderStatusType[] = [
   OrderStatus.PENDING,
   OrderStatus.CONFIRMED,
 ];

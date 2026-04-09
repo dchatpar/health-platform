@@ -20,7 +20,8 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@shared': path.resolve(__dirname, '../packages/shared/dist'),
+      '@shared': path.resolve(__dirname, './packages/shared/dist'),
+      '@health/shared': path.resolve(__dirname, './packages/shared/dist'),
     };
     return config;
   },

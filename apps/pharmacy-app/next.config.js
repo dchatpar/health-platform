@@ -21,7 +21,8 @@ const nextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@hooks': path.resolve(__dirname, 'hooks'),
-      '@shared': path.resolve(__dirname, '../packages/shared/dist'),
+      '@shared': path.resolve(__dirname, './packages/shared/dist'),
+      '@health/shared': path.resolve(__dirname, './packages/shared/dist'),
     };
     return config;
   },

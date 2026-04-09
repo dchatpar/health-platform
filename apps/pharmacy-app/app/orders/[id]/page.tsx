@@ -46,7 +46,8 @@ import {
   Download as DownloadIcon,
 } from '@mui/icons-material';
 import { Header } from '@/components/common/Header';
-import { useQuery, useMutation, useQueryClient } from '@/hooks';
+import { useQuery } from '@/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services';
 import { Order, Claim, ClaimStatus } from '@/types';
 import { formatCurrency, formatDateTime, formatDate, getOrderStatusColor } from '@/lib';
@@ -69,7 +70,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => api.getOrder(id),
+    queryFn: () => api.getOrder<Order>(id),
     enabled: !!id,
   });
 

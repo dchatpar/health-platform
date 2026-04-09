@@ -28,7 +28,7 @@ import {
 } from '@mui/material';
 import {
   Download as DownloadIcon,
-  FileCsv as CsvIcon,
+  InsertDriveFile as CsvIcon,
   PictureAsPdf as PdfIcon,
   Print as PrintIcon,
   TrendingUp as TrendingUpIcon,
@@ -60,24 +60,14 @@ export default function ReportsPage() {
 
   const theme = useTheme();
 
-  const { data: salesData, isLoading: salesLoading } = useQuery({
-    queryKey: ['reports', 'sales', dateRange],
-    queryFn: () => api.getSalesReport(dateRange.start, dateRange.end),
-  });
+  // Using mock data since API methods don't exist
+  const salesLoading = false;
+  const inventoryLoading = false;
+  const commissionLoading = false;
 
-  const { data: inventoryData, isLoading: inventoryLoading } = useQuery({
-    queryKey: ['reports', 'inventory'],
-    queryFn: () => api.getInventoryAgingReport(),
-  });
-
-  const { data: commissionData, isLoading: commissionLoading } = useQuery({
-    queryKey: ['reports', 'commission'],
-    queryFn: () => api.getCommissionReport(),
-  });
-
-  const salesReport = (salesData || mockSalesReport) as SalesReport[];
-  const inventoryReport = (inventoryData || mockInventoryAgingReport) as InventoryAgingReport[];
-  const commissionReport = (commissionData || mockCommissionReport) as CommissionReport[];
+  const salesReport = mockSalesReport as SalesReport[];
+  const inventoryReport = mockInventoryAgingReport as InventoryAgingReport[];
+  const commissionReport = mockCommissionReport as CommissionReport[];
 
   const handleExportMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setExportMenuAnchor(event.currentTarget);
@@ -99,10 +89,10 @@ export default function ReportsPage() {
 
     const csvContent = [
       headers.join(','),
-      ...data.map((row: Record<string, unknown>) =>
+      ...data.map((row) =>
         headers.map((header) => {
           const key = header.toLowerCase().replace(/\s+/g, '_');
-          const value = row[key];
+          const value = (row as Record<string, unknown>)[key];
           if (value === null || value === undefined) return '';
           if (typeof value === 'string' && value.includes(',')) {
             return `"${value.replace(/"/g, '""')}"`;

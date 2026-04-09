@@ -48,7 +48,8 @@ import {
 } from '@mui/icons-material';
 import { Header } from '@/components/common/Header';
 import { DataTable, Column } from '@/components/common/DataTable';
-import { useQuery, useMutation, useQueryClient, usePermissions } from '@/hooks';
+import { useQuery, usePermissions } from '@/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services';
 import { Order, OrderStatus } from '@/types';
 import { formatCurrency, formatDateTime, formatRelativeTime, getOrderStatusColor } from '@/lib';
@@ -100,7 +101,7 @@ export default function OrdersPage() {
     },
   });
 
-  const orders = ordersData?.items || [];
+  const orders = (ordersData?.items || []) as Order[];
 
   const getStatusChipColor = (status: string) => {
     const colors: Record<string, 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {

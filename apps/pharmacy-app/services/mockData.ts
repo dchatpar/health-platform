@@ -649,7 +649,7 @@ export const api = {
     }
 
     if (params?.date) {
-      filtered = filtered.filter((o) => o.receivedAt.startsWith(params.date));
+      filtered = filtered.filter((o) => o.receivedAt.startsWith(params.date!));
     }
 
     return { items: filtered, total: filtered.length };
@@ -756,6 +756,3 @@ export const api = {
     return mockPharmacy;
   },
 };
-
-export type Order = import('@/types').Order;
-export type Claim = import('@/types').Claim;

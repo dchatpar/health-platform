@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['../.eslintrc.base.js'],
+  extends: ['../../.eslintrc.base.js'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',

@@ -27,7 +27,7 @@ import {
   Lock as LockIcon,
   LocalPharmacy as PharmacyIcon,
 } from '@mui/icons-material';
-import { LoginSchema } from '@shared/validators/auth.validators';
+import { LoginSchema } from '@health/shared/validators';
 
 type LoginFormData = z.infer<typeof LoginSchema>;
 

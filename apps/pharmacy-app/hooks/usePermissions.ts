@@ -76,7 +76,8 @@ const rolePermissions: Record<StaffRole, Permission[]> = {
 };
 
 export function usePermissions() {
-  const { data: session } = useSession();
+  const sessionResult = useSession();
+  const { data: session } = sessionResult || { data: undefined };
   const userRole = (session?.user as { role?: StaffRole })?.role || 'viewer';
 
   const hasPermission = (permission: Permission): boolean => {

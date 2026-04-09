@@ -26,6 +26,7 @@ import {
   FormControl,
   InputLabel,
   Stack,
+  Typography,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -344,9 +345,9 @@ export function DataTable<T extends { id?: string }>({
                         {columns.map((column) => (
                           <TableCell key={String(column.id)} align={column.align || 'left'}>
                             {column.format
-                              ? column.format(row[column.id as keyof T], row)
+                              ? (column.format(row[column.id as keyof T], row) as React.ReactNode)
                               : column.id === 'status'
-                              ? row[column.id as keyof T]
+                              ? (row[column.id as keyof T] as React.ReactNode)
                               : String(row[column.id as keyof T] ?? '-')}
                           </TableCell>
                         ))}

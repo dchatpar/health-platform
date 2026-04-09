@@ -18,7 +18,12 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const useThemeMode = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useThemeMode must be used within a ThemeProvider');
+    // Return a default context during SSR or when not mounted
+    return {
+      mode: 'light' as const,
+      toggleTheme: () => {},
+      setTheme: () => {},
+    };
   }
   return context;
 };

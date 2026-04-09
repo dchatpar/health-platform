@@ -46,7 +46,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Header } from '@/components/common/Header';
 import { DataTable, Column } from '@/components/common/DataTable';
-import { useQuery, useMutation, useQueryClient, usePermissions } from '@/hooks';
+import { useQuery, usePermissions } from '@/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services';
 import { Medicine, medicineSchema } from '@/lib/validators';
 import { formatCurrency, getStockStatus, getDaysUntilExpiry } from '@/lib';
@@ -170,7 +171,7 @@ export default function CatalogPage() {
     },
   });
 
-  const medicines = medicinesData?.items || [];
+  const medicines = (medicinesData?.items || []) as Medicine[];
 
   const columns: Column<Medicine>[] = [
     {

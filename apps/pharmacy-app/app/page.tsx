@@ -27,7 +27,7 @@ import {
 } from '@mui/icons-material';
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { Header } from '@/components/common/Header';
-import { useQuery } from '@hooks';
+import { useQuery } from '@/hooks';
 import { api, mockDashboardStats } from '@/services';
 import { formatCurrency, formatRelativeTime } from '@/lib';
 
@@ -368,7 +368,7 @@ function PendingClaimsWidget({ claims, loading }: { claims: any[]; loading?: boo
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <ReceiptIcon sx={{ color: 'info.main' }} />
+            <ClaimsIcon sx={{ color: 'info.main' }} />
             <Typography variant="h6" fontWeight={600}>
               Claims
             </Typography>
@@ -424,13 +424,9 @@ export default function DashboardPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { data: stats, isLoading } = useQuery({
-    queryKey: ['dashboard'],
-    queryFn: () => api.getDashboardStats(),
-    staleTime: 30000,
-  });
-
-  const dashboardData = stats || mockDashboardStats;
+  // Using mock data since backend API is not available
+  const isLoading = false;
+  const dashboardData = mockDashboardStats;
 
   const lowStockMedicines = [
     { id: '1', name: 'Ibuprofen 400mg', stock: 15, minStock: 30 },

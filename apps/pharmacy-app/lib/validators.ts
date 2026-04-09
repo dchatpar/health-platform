@@ -105,6 +105,7 @@ export const pharmacySchema = z.object({
 });
 
 export type MedicineInput = z.infer<typeof medicineSchema>;
+export type Medicine = MedicineInput & { id: string };
 export type OrderInput = z.infer<typeof orderSchema>;
 export type StockUpdateInput = z.infer<typeof stockUpdateSchema>;
 export type ClaimProcessInput = z.infer<typeof claimProcessSchema>;

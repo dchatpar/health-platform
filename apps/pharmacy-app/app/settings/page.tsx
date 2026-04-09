@@ -48,7 +48,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Header } from '@/components/common/Header';
-import { useQuery, useMutation, useQueryClient, usePermissions } from '@/hooks';
+import { useQuery, usePermissions } from '@/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, mockPharmacy, mockStaffUsers } from '@/services';
 import { StaffUser, StaffRole, Pharmacy } from '@/types';
 import { formatDateTime } from '@/lib';
@@ -93,7 +94,7 @@ export default function SettingsPage() {
 
   const { data: pharmacyData } = useQuery({
     queryKey: ['settings', 'pharmacy'],
-    queryFn: () => api.getPharmacy(),
+    queryFn: () => api.getPharmacy<Pharmacy>(),
   });
 
   const { data: staffData } = useQuery({
@@ -102,7 +103,7 @@ export default function SettingsPage() {
   });
 
   const pharmacy = pharmacyData || mockPharmacy;
-  const staffUsers = staffData?.items || mockStaffUsers;
+  const staffUsers = (staffData?.items || mockStaffUsers) as StaffUser[];
 
   const updatePharmacyMutation = useMutation({
     mutationFn: (data: Partial<Pharmacy>) => api.updatePharmacy(data),

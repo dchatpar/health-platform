@@ -265,7 +265,7 @@ export function WeeklyTrendChart({ title, subtitle, height = 300 }: ChartProps) 
   );
 }
 
-export function TopMedicinesChart({ title, subtitle, height = 300 }: ChartProps & { data: Array<{ name: string; value: number }> }) {
+export function TopMedicinesChart({ title, subtitle, height = 300, data }: ChartProps & { data: Array<{ name: string; value: number }> }) {
   const theme = useTheme();
 
   return (
@@ -309,6 +309,7 @@ export function StockLevelChart({
   title,
   subtitle,
   height = 300,
+  data,
 }: ChartProps & {
   data: Array<{ name: string; current: number; min: number; max: number }>;
 }) {

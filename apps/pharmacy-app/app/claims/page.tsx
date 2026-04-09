@@ -13,6 +13,7 @@ import {
   DialogActions,
   TextField,
   Chip,
+  Badge,
   Grid,
   Alert,
   Snackbar,
@@ -39,7 +40,8 @@ import {
 } from '@mui/icons-material';
 import { Header } from '@/components/common/Header';
 import { DataTable, Column } from '@/components/common/DataTable';
-import { useQuery, useMutation, useQueryClient, usePermissions } from '@/hooks';
+import { useQuery, usePermissions } from '@/hooks';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/services';
 import { Claim, ClaimStatus } from '@/types';
 import { formatCurrency, formatDateTime, formatRelativeTime } from '@/lib';
@@ -88,7 +90,7 @@ export default function ClaimsPage() {
     },
   });
 
-  const claims = claimsData?.items || [];
+  const claims = (claimsData?.items || []) as Claim[];
 
   const getStatusChipColor = (status: string) => {
     const colors: Record<string, 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {
@@ -255,11 +257,9 @@ export default function ClaimsPage() {
                 label={tab.label}
                 icon={
                   tab.value !== 'all' ? (
-                    <Chip
-                      badgeContent={claims.filter((c) => c.status === tab.value).length}
-                      color="primary"
-                      max={99}
-                    />
+                    <Badge badgeContent={claims.filter((c) => c.status === tab.value).length} color="primary" max={99}>
+                      <Chip label={tab.label} size="small" />
+                    </Badge>
                   ) : undefined
                 }
                 iconPosition="start"

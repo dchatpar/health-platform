@@ -17,7 +17,7 @@ declare module '@mui/material/Button' {
   }
 }
 
-let theme = createTheme({
+export let theme = createTheme({
   palette: {
     mode: 'light',
     primary: {

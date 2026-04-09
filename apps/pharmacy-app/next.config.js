@@ -8,7 +8,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  transpilePackages: ['@health/shared'],
   images: {
     remotePatterns: [
       {
@@ -17,16 +16,9 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    optimizePackageImports: ['@mui/material', '@mui/icons-material'],
-  },
   webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@hooks': path.resolve(__dirname, 'hooks'),
-      '@shared': path.resolve(__dirname, './packages/shared'),
-      '@health/shared': path.resolve(__dirname, './packages/shared'),
-    };
+    config.resolve.alias['@health/shared'] = path.resolve(__dirname, 'packages/shared');
+    config.resolve.alias['@shared'] = path.resolve(__dirname, 'packages/shared');
     return config;
   },
 };
